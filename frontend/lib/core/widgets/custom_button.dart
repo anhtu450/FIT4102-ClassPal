@@ -4,34 +4,42 @@ import '../constants/app_colors.dart';
 class CustomButton extends StatelessWidget {
   final String text;
   final VoidCallback onPressed;
-  final Color? color;
-  final Color? textColor;
+  final Color backgroundColor;
+  final Color textColor;
+  final double borderRadius;
+  final double height;
 
   const CustomButton({
     Key? key,
     required this.text,
     required this.onPressed,
-    this.color,
-    this.textColor,
+    this.backgroundColor = AppColors.primary,
+    this.textColor = AppColors.white,
+    this.borderRadius = 12.0,
+    this.height = 50.0,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-      style: ElevatedButton.styleFrom(
-        backgroundColor: color ?? AppColors.primary,
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
+    return SizedBox(
+      width: double.infinity,
+      height: height,
+      child: ElevatedButton(
+        onPressed: onPressed,
+        style: ElevatedButton.styleFrom(
+          backgroundColor: backgroundColor,
+          foregroundColor: textColor,
+          elevation: 0,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(borderRadius),
+          ),
         ),
-      ),
-      onPressed: onPressed,
-      child: Text(
-        text,
-        style: TextStyle(
-          color: textColor ?? AppColors.onPrimary,
-          fontSize: 16,
-          fontWeight: FontWeight.bold,
+        child: Text(
+          text,
+          style: const TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ),
     );

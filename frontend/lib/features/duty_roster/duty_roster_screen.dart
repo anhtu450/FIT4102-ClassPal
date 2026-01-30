@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:classpal/core/constants/app_colors.dart';
 
 class DutyRosterScreen extends StatelessWidget {
   const DutyRosterScreen({Key? key}) : super(key: key);
@@ -6,9 +8,26 @@ class DutyRosterScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Lịch Trực Nhật')),
+      backgroundColor: AppColors.background,
+      appBar: AppBar(
+        title: const Text('Lịch Trực Nhật', style: TextStyle(fontWeight: FontWeight.bold)),
+        backgroundColor: AppColors.white,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios, size: 20),
+          onPressed: () => context.pop(),
+        ),
+      ),
       body: const Center(
-        child: Text('Chức năng Trực Nhật (FR1) đang phát triển'),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+             Icon(Icons.cleaning_services, size: 60, color: AppColors.grey),
+             SizedBox(height: 16),
+             Text('Chức năng Trực Nhật (FR1)', style: TextStyle(fontSize: 18, color: AppColors.textSecondary)),
+             Text('Đang phát triển...', style: TextStyle(fontSize: 14, color: AppColors.grey)),
+          ],
+        ),
       ),
     );
   }
