@@ -1,0 +1,17 @@
+@backend_HostAddress = http://localhost:5297
+
+### Xem danh sách nhiệm vụ (Bấm Send Request ở dòng dưới)
+GET {{backend_HostAddress}}/api/task
+Accept: application/json
+
+### Tạo một nhiệm vụ mới (Bấm Send Request ở dòng dưới)
+POST {{backend_HostAddress}}/api/task
+Content-Type: application/json
+
+{
+  "title": "Ca sáng, 07:00 - 12:00",
+  "description": "Kiểm tra hệ thống, báo cáo sự cố",
+  "assigneeName": "Nguyễn Văn A",
+  "isCompleted": false,
+  "taskDate": "2024-05-15T07:00:00"
+}
