@@ -1,122 +1,161 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+
+// --- 1. IMPORT CƠ BẢN & XÁC THỰC ---
+import 'screens/welcome_screen.dart';
+import 'screens/login_screen.dart';
+import 'screens/register_screen.dart';
+import 'screens/otp_verification_screen.dart';
+import 'screens/profile_screen.dart'; 
+
+// --- 2. HỆ THỐNG TRANG CHỦ ---
+import 'screens/main_screen.dart'; 
+import 'screens/admin_home_screen.dart';
+import 'screens/student_home_screen.dart';
+
+// --- 3. MODULE QUẢN LÝ TÁC VỤ & LỊCH (FR1) ---
+import 'screens/task_list_v1_screen.dart'; 
+import 'screens/calendar_screen.dart';
+import 'screens/duty_schedule_screen.dart';
+import 'screens/reminder_screen.dart';
+
+// --- 4. MODULE TÀI CHÍNH & XẾP HẠNG (FR4) ---
+import 'screens/finance_report_screen.dart';
+import 'screens/expense_log_screen.dart';
+import 'screens/fund_details_chart_screen.dart';
+import 'screens/leaderboard_screen.dart';
+
+// --- 5. MODULE TÀI SẢN (FR2) ---
+import 'screens/asset_management_screen.dart';
+import 'screens/asset_history_screen.dart'; 
+import 'screens/borrow_device_form.dart'; 
+
+// --- 6. MODULE SỰ KIỆN (FR3) ---
+import 'screens/event_list_screen.dart';
+import 'screens/event_detail_screen.dart';
+import 'screens/event_admin_dashboard_screen.dart';
+import 'screens/add_event_screen.dart'; // 🔥 Đã thêm mảnh ghép mới
 
 void main() {
-  runApp(const MyApp());
+  WidgetsFlutterBinding.ensureInitialized();
+  
+  // 📱 Cấu hình hệ thống: Thanh trạng thái trong suốt & Chế độ màn hình đứng
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+    statusBarColor: Colors.transparent,
+    statusBarIconBrightness: Brightness.dark,
+  ));
+  
+  runApp(const ClassPalApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class ClassPalApp extends StatelessWidget {
+  const ClassPalApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    const Color primaryOrange = Color(0xFFF05123);
+
     return MaterialApp(
-      title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
+      title: 'ClassPal',
+      
+      // 🎨 THEME ĐỒNG BỘ THƯƠNG HIỆU CLASSPAL
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: .fromSeed(seedColor: Colors.deepPurple),
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
-    );
-  }
-}
+        useMaterial3: true,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: primaryOrange,
+          primary: primaryOrange,
+          secondary: const Color(0xFFFF8C00),
+          surface: Colors.white,
+        ),
+        scaffoldBackgroundColor: Colors.white,
+        fontFamily: 'Roboto', 
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Colors.white,
+          elevation: 0,
+          centerTitle: true,
+          surfaceTintColor: Colors.white,
+          iconTheme: IconThemeData(color: Colors.black, size: 22),
+          titleTextStyle: TextStyle(
+            color: Color(0xFF111827), 
+            fontSize: 20, 
+            fontWeight: FontWeight.w900
+          ),
+        ),
 
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: primaryOrange,
+            foregroundColor: Colors.white,
+            elevation: 0,
+            minimumSize: const Size(double.infinity, 56),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+            textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          ),
+        ),
 
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
-    return Scaffold(
-      appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
-          mainAxisAlignment: .center,
-          children: [
-            const Text('You have pushed the button this many times:'),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
+        bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+          selectedItemColor: primaryOrange,
+          unselectedItemColor: Colors.grey,
+          backgroundColor: Colors.white,
+          elevation: 10,
+          type: BottomNavigationBarType.fixed,
+          selectedLabelStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ),
+
+      initialRoute: '/welcome',
+
+      // 🗺️ BẢN ĐỒ ĐIỀU HƯỚNG (ROUTES)
+      routes: {
+        // Cụm khởi đầu
+        '/welcome': (context) => const WelcomeScreen(),
+        '/login': (context) => const LoginScreen(),
+        '/register': (context) => const RegisterScreen(),
+        '/otp_verification': (context) => const OtpVerificationScreen(),
+        
+        // Cụm trang chủ
+        '/main_screen': (context) => const MainScreen(), 
+        '/admin_home': (context) => const AdminHomeScreen(),
+        '/student_home': (context) => const StudentHomeScreen(),
+        
+        // Module Quản lý & Nhiệm vụ
+        '/task_list': (context) => const TaskListScreen(), 
+        '/calendar': (context) => const CalendarScreen(),
+        '/duty_schedule': (context) => const DutyScheduleScreen(),
+        '/reminder': (context) => const ReminderScreen(),
+        
+        // Module Tài chính & Cộng đồng
+        '/finance_report': (context) => const FinanceReportScreen(),
+        '/expense_log': (context) => const ExpenseLogScreen(),
+        '/fund_details': (context) => const FundDetailsChartScreen(),
+        '/leaderboard': (context) => const LeaderboardScreen(),
+        
+        // Module Tài sản
+        '/asset_management': (context) => const AssetManagementScreen(),
+        '/asset_history': (context) => const AssetHistoryScreen(),
+        '/borrow_device': (context) => const BorrowDeviceForm(), 
+        
+        // 🔥 MODULE SỰ KIỆN (FR3)
+        '/event_list': (context) => const EventListScreen(),
+        '/event_detail': (context) => const EventDetailScreen(),
+        '/event_admin_dashboard': (context) => const EventAdminDashboardScreen(),
+        '/add_event': (context) => const AddEventScreen(), // Link đến màn hình tạo mới
+
+        '/profile': (context) => const ProfileScreen(),
+      },
+
+      // Xử lý khi Navigator gọi nhầm tên route
+      onUnknownRoute: (settings) {
+        return MaterialPageRoute(
+          builder: (context) => Scaffold(
+            appBar: AppBar(title: const Text('Ops!')),
+            body: const Center(child: Text('Trang này đang được nâng cấp!')),
+          ),
+        );
+      },
     );
   }
 }
