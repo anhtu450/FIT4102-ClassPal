@@ -5,7 +5,7 @@ publish_to: 'none'
 version: 1.0.0+1
 
 environment:
-  sdk: '>=3.0.0 <4.0.0' # Thiết lập dải phiên bản rộng để ổn định hơn
+  sdk: '>=3.0.0 <4.0.0'
 
 dependencies:
   flutter:
@@ -14,12 +14,14 @@ dependencies:
   # 🎨 Icons & Giao diện
   cupertino_icons: ^1.0.8
   font_awesome_flutter: ^10.7.0
+  # 🔥 Cách đổi font "ngầu" mà không bị lỗi file assets
+  google_fonts: ^6.2.1 
 
   # 🛠️ Tiện ích hệ thống & Điều hướng
-  google_maps_flutter: ^2.5.0 # Cập nhật bản mới hơn để mượt hơn
+  google_maps_flutter: ^2.5.0
   url_launcher: ^6.3.2
   google_sign_in: ^6.1.0
-  go_router: ^13.0.0 # Cập nhật bản mới để tránh lỗi Navigator cũ
+  go_router: ^13.0.0
   
   # 🔥 Xử lý ngày tháng & Ngôn ngữ
   intl: ^0.19.0 
@@ -29,6 +31,9 @@ dependencies:
 
   # 🎉 Hiệu ứng pháo hoa (Cho module Đăng ký sự kiện FR3.2)
   confetti: ^0.7.0
+  
+  # 🌐 Kết nối API với Backend .NET 9
+  http: ^1.2.2
 
 dev_dependencies:
   flutter_test:
@@ -38,11 +43,13 @@ dev_dependencies:
 flutter:
   uses-material-design: true
 
-  # 🚀 KHAI BÁO TÀI NGUYÊN (Lưu ý: Thụt lề đúng 2 dấu cách)
+  # 🚀 KHAI BÁO TÀI NGUYÊN
   assets:
     - assets/images/
-    # - assets/icons/ # Mở thêm nếu sếp có dùng icon riêng
+    # - assets/icons/ 
+    # Mẹo: Sếp nhớ tạo folder 'assets/images' ở thư mục gốc project nhé!
 
+  # 🖋️ KHAI BÁO FONTS (ĐÃ KHÓA ĐỂ TRÁNH LỖI BIÊN DỊCH)
   # fonts:
   #   - family: Roboto
   #     fonts:

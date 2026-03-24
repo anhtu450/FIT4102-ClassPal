@@ -16,54 +16,47 @@ namespace backend.Controllers
             _context = context;
         }
 
-        // 1. Lấy danh sách toàn bộ nhiệm vụ (Để hiển thị lên App)
-        // GET: api/task
+        // 1. LẤY TẤT CẢ NHIỆM VỤ (FR1.1: Để cả lớp cùng xem ai trực nhật tuần này)
         [HttpGet]
         public async Task<ActionResult<IEnumerable<DutyTask>>> GetTasks()
         {
-            return await _context.DutyTasks.ToListAsync();
+            return await _context.DutyTasks
+                .OrderByDescending(t => t.TaskDate)
+                .ToListAsync();
         }
 
-        // 2. Tạo nhiệm vụ mới (Lớp trưởng thêm lịch trực nhật)
-        // POST: api/task
+        // 2. GIAO NHIỆM VỤ MỚI (FR1.1: Lớp trưởng tạo việc: "Trực nhật tầng 3", "Giặt giẻ lau")
         [HttpPost]
         public async Task<ActionResult<DutyTask>> CreateTask(DutyTask task)
         {
             _context.DutyTasks.Add(task);
             await _context.SaveChangesAsync();
 
-            // Trả về mã 201 Created và dữ liệu vừa tạo
             return CreatedAtAction(nameof(GetTasks), new { id = task.Id }, task);
         }
 
-        // 3. Cập nhật trạng thái "Hoàn thành" (Nút gạt toggle trên UI)
-        // PUT: api/task/5/toggle
-        [HttpPut("{id}/toggle")]
-        public async Task<IActionResult> ToggleTaskCompletion(int id)
+        // 3. XÁC NHẬN HOÀN THÀNH (FR1.3: Tổ trưởng bấm "Đã hoàn thành" để được cộng điểm)
+        [HttpPut("{id}/complete")]
+        public async Task<IActionResult> CompleteTask(int id)
         {
             var task = await _context.DutyTasks.FindAsync(id);
             if (task == null)
             {
-                return NotFound("Không tìm thấy nhiệm vụ!");
+                return NotFound(new { message = "Không tìm thấy nhiệm vụ này!" });
             }
 
-            // Đảo ngược trạng thái (đang false thành true, đang true thành false)
-            task.IsCompleted = !task.IsCompleted; 
+            task.IsCompleted = true; // Đánh dấu đã xong
             await _context.SaveChangesAsync();
 
-            return Ok(task);
+            return Ok(new { message = "Chúc mừng! Nhiệm vụ đã hoàn thành và ghi nhận vào Bảng Vàng.", task });
         }
 
-        // 4. Xóa nhiệm vụ
-        // DELETE: api/task/5
+        // 4. XÓA NHIỆM VỤ (Dành cho Lớp trưởng nếu chia nhầm tổ)
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTask(int id)
         {
             var task = await _context.DutyTasks.FindAsync(id);
-            if (task == null)
-            {
-                return NotFound();
-            }
+            if (task == null) return NotFound();
 
             _context.DutyTasks.Remove(task);
             await _context.SaveChangesAsync();

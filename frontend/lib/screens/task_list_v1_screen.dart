@@ -1,6 +1,8 @@
 // Đường dẫn: lib/screens/task_list_v1_screen.dart
 
 import 'package:flutter/material.dart';
+import '../services/api_service.dart';
+import '../utils/app_session.dart';
 
 class TaskListScreen extends StatefulWidget {
   const TaskListScreen({super.key});
@@ -10,13 +12,21 @@ class TaskListScreen extends StatefulWidget {
 }
 
 class _TaskListScreenState extends State<TaskListScreen> {
-  // 📝 Danh sách nhiệm vụ (Đưa vào State để có thể thêm/xóa)
-  final List<Map<String, dynamic>> _tasks = [
-    {'title': 'Nộp bài tập Toán', 'deadline': '20/10/2024', 'icon': Icons.book_outlined},
-    {'title': 'Chuẩn bị thuyết trình Văn', 'deadline': '22/10/2024', 'icon': Icons.edit_outlined},
-    {'title': 'Đăng ký giải bóng đá', 'deadline': '25/10/2024', 'icon': Icons.sports_soccer},
-    {'title': 'Thí nghiệm Sinh học', 'deadline': '27/10/2024', 'icon': Icons.biotech_outlined},
-  ];
+  late Future<List<dynamic>> _tasksFuture;
+  final Color primaryOrange = const Color(0xFFF05123);
+
+  @override
+  void initState() {
+    super.initState();
+    _refreshTasks();
+  }
+
+  // Hàm làm mới danh sách từ Backend
+  void _refreshTasks() {
+    setState(() {
+      _tasksFuture = ApiService.getTasks();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,6 +40,12 @@ class _TaskListScreenState extends State<TaskListScreen> {
           'Quản Lý Công Việc',
           style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 20),
         ),
+        actions: [
+          IconButton(
+            onPressed: _refreshTasks,
+            icon: const Icon(Icons.refresh, color: Colors.black),
+          )
+        ],
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -42,36 +58,54 @@ class _TaskListScreenState extends State<TaskListScreen> {
             ),
           ),
           Expanded(
-            child: _tasks.isEmpty 
-              ? _buildEmptyState() // Hiển thị khi hết việc
-              : ListView.builder(
+            child: FutureBuilder<List<dynamic>>(
+              future: _tasksFuture,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+                
+                if (snapshot.hasError || !snapshot.hasData) {
+                  return const Center(child: Text("Không thể kết nối với Backend sếp ơi!"));
+                }
+
+                // Lấy data và lọc (Nếu sếp muốn hiện tất cả thì bỏ .where đi)
+                final tasks = snapshot.data!;
+
+                if (tasks.isEmpty) return _buildEmptyState();
+
+                return ListView.builder(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
-                  itemCount: _tasks.length,
+                  itemCount: tasks.length,
                   itemBuilder: (context, index) {
-                    final task = _tasks[index];
-                    
-                    // 🔥 KHẮC PHỤC LỖI GLOBAL KEY: Dùng Dismissible kèm ValueKey
+                    final task = tasks[index];
+                    final taskId = task['id'];
+
                     return Dismissible(
-                      key: ValueKey(task['title']), // ID duy nhất để Flutter không nhầm lẫn
+                      key: ValueKey(taskId), // Dùng ID từ Database làm Key (Chuẩn bài!)
                       direction: DismissDirection.endToStart,
-                      onDismissed: (direction) {
-                        setState(() {
-                          _tasks.removeAt(index);
-                        });
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Đã xóa "${task['title']}"')),
-                        );
+                      confirmDismiss: (direction) async {
+                        // Hỏi sếp trước khi xóa thật
+                        return await _showDeleteConfirm(task['title']);
+                      },
+                      onDismissed: (direction) async {
+                        bool deleted = await ApiService.deleteTask(taskId);
+                        if (deleted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('Đã xóa "${task['title']}" khỏi Database')),
+                          );
+                        }
                       },
                       background: _buildDeleteBackground(),
                       child: _buildTaskCard(task),
                     );
                   },
-                ),
+                );
+              },
+            ),
           ),
         ],
       ),
-      
-      // 🚀 NÚT THÊM CÔNG VIỆC GRADIENT
       floatingActionButton: _buildGradientFAB(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
@@ -80,6 +114,8 @@ class _TaskListScreenState extends State<TaskListScreen> {
   // --- WIDGET COMPONENTS ---
 
   Widget _buildTaskCard(Map<String, dynamic> task) {
+    bool isDone = task['isCompleted'] ?? false;
+
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
@@ -98,23 +134,35 @@ class _TaskListScreenState extends State<TaskListScreen> {
         leading: Container(
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
-            color: Colors.grey.shade50,
+            color: isDone ? Colors.green.shade50 : Colors.grey.shade50,
             borderRadius: BorderRadius.circular(14),
           ),
-          child: Icon(task['icon'], color: Colors.black87, size: 24),
+          child: Icon(
+            isDone ? Icons.check_circle : Icons.assignment_outlined, 
+            color: isDone ? Colors.green : Colors.black87, 
+            size: 24
+          ),
         ),
         title: Text(
-          task['title'],
-          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 17, color: Color(0xFF111827)),
+          task['title'] ?? 'Nhiệm vụ không tên',
+          style: TextStyle(
+            fontWeight: FontWeight.bold, 
+            fontSize: 17, 
+            color: const Color(0xFF111827),
+            decoration: isDone ? TextDecoration.lineThrough : null,
+          ),
         ),
         subtitle: Padding(
           padding: const EdgeInsets.only(top: 6.0),
           child: Text(
-            'Hạn: ${task['deadline']}',
+            'Người làm: ${task['assigneeName'] ?? "Chưa phân công"}',
             style: TextStyle(color: Colors.grey.shade500, fontSize: 13),
           ),
         ),
         trailing: const Icon(Icons.chevron_right_rounded, color: Colors.grey),
+        onTap: () {
+          // TODO: Mở chi tiết công việc hoặc đánh dấu hoàn thành
+        },
       ),
     );
   }
@@ -128,7 +176,14 @@ class _TaskListScreenState extends State<TaskListScreen> {
         color: Colors.redAccent,
         borderRadius: BorderRadius.circular(20),
       ),
-      child: const Icon(Icons.delete_outline, color: Colors.white),
+      child: const Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Text("XÓA VĨNH VIỄN", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+          SizedBox(width: 10),
+          Icon(Icons.delete_sweep_outlined, color: Colors.white),
+        ],
+      ),
     );
   }
 
@@ -137,9 +192,9 @@ class _TaskListScreenState extends State<TaskListScreen> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.assignment_turned_in_outlined, size: 80, color: Colors.grey.shade200),
+          Icon(Icons.task_alt_rounded, size: 80, color: Colors.grey.shade200),
           const SizedBox(height: 16),
-          const Text('Tuyệt vời! Bạn đã hoàn thành hết việc.', style: TextStyle(color: Colors.grey)),
+          const Text('Hiện không có công việc nào cần xử lý!', style: TextStyle(color: Colors.grey)),
         ],
       ),
     );
@@ -163,11 +218,14 @@ class _TaskListScreenState extends State<TaskListScreen> {
         ],
       ),
       child: InkWell(
-        onTap: () {},
+        onTap: () {
+          // TODO: Điều hướng đến trang thêm công việc
+          _refreshTasks(); 
+        },
         child: const Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.add, color: Colors.white),
+            Icon(Icons.add_task_rounded, color: Colors.white),
             SizedBox(width: 8),
             Text(
               'Thêm công việc',
@@ -175,6 +233,20 @@ class _TaskListScreenState extends State<TaskListScreen> {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Future<bool?> _showDeleteConfirm(String title) {
+    return showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text("Xác nhận xóa?"),
+        content: Text("Sếp có chắc muốn xóa nhiệm vụ '$title' khỏi hệ thống không?"),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(context, false), child: const Text("HỦY")),
+          TextButton(onPressed: () => Navigator.pop(context, true), child: const Text("XÓA", style: TextStyle(color: Colors.red))),
+        ],
       ),
     );
   }

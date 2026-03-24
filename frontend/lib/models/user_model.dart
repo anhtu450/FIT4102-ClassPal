@@ -1,63 +1,66 @@
 // Đường dẫn: lib/models/user_model.dart
 
 class UserModel {
-  final String id;
-  final String name;
-  final String email;
-  // 🔥 Bỏ 'final' ở role để có thể thay đổi vai trò khi đăng nhập (fix lỗi gạch đỏ)
-  String role; 
-  final String phone;
+  final int id;           
+  final String studentId; 
+  final String name;      // 🔥 Đã đổi từ fullName thành name theo ý sếp
+  final String role;      
+  final String? email;    
+  final String? phone;
   final String school;
 
   UserModel({
     required this.id,
-    required this.name,
-    required this.email,
+    required this.studentId,
+    required this.name,   // 🔥 Đồng bộ name
     required this.role,
+    this.email,
     this.phone = '0987.xxx.xxx',
     this.school = 'Đại học Đại Nam',
   });
 
   /// 🔥 HÀM "MA THUẬT": copyWith
-  /// Giúp tạo ra một bản sao mới của User và chỉ cập nhật những gì Tú muốn.
-  /// Rất hữu ích khi Tú muốn đổi role mà không muốn gõ lại id, name, email...
   UserModel copyWith({
-    String? id,
-    String? name,
-    String? email,
+    int? id,
+    String? studentId,
+    String? name,        // 🔥 Đồng bộ name
     String? role,
+    String? email,
     String? phone,
     String? school,
   }) {
     return UserModel(
       id: id ?? this.id,
+      studentId: studentId ?? this.studentId,
       name: name ?? this.name,
-      email: email ?? this.email,
       role: role ?? this.role,
+      email: email ?? this.email,
       phone: phone ?? this.phone,
       school: school ?? this.school,
     );
   }
 
-  // Tiện ích: Chuyển đổi sang Map để sau này lưu vào Local Storage hoặc gửi lên Server
+  // Chuyển đổi sang Map để gửi lên Server (Vẫn gửi key 'fullName' để Backend .NET hiểu)
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'name': name,
-      'email': email,
+      'studentId': studentId,
+      'fullName': name,  // 🔥 Map biến name vào key 'fullName' của Backend
       'role': role,
+      'email': email,
       'phone': phone,
       'school': school,
     };
   }
 
-  // Tiện ích: Tạo User từ dữ liệu Json (Map)
+  // 🔥 QUAN TRỌNG: Tạo User từ dữ liệu Json (Map) của Backend .NET 9
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
-      id: json['id'],
-      name: json['name'],
+      id: json['id'] ?? 0,
+      studentId: json['studentId'] ?? '',
+      name: json['fullName'] ?? '', // 🔥 Hứng 'fullName' từ server đưa vào biến 'name'
+      role: json['role'] ?? 'Student',
       email: json['email'],
-      role: json['role'],
       phone: json['phone'] ?? '0987.xxx.xxx',
       school: json['school'] ?? 'Đại học Đại Nam',
     );

@@ -3,15 +3,16 @@
 import '../models/user_model.dart';
 
 class AppSession {
-  // 👤 Người dùng hiện tại (Lưu trong RAM)
+  // 👤 Người dùng hiện tại (Lưu trong RAM sau khi API trả kết quả về)
   static UserModel? currentUser;
 
   // -------------------------------------------------------------------
-  // 📦 DỮ LIỆU MẪU (MOCK DATA) - ĐÃ KHÔI PHỤC ĐẦY ĐỦ
+  // 📦 DỮ LIỆU MẪU (MOCK DATA) - KHỚP 100% VỚI MODEL NAME & STUDENT_ID
   // -------------------------------------------------------------------
   
   static final UserModel mockAdmin = UserModel(
-    id: 'ADM-21A100', 
+    id: 1, 
+    studentId: 'ADM-21A100', 
     name: 'Admin Tú', 
     email: 'admin@dainam.edu.vn', 
     role: 'admin', 
@@ -20,7 +21,8 @@ class AppSession {
   );
 
   static final UserModel mockStudent = UserModel(
-    id: '21A123456', 
+    id: 2, 
+    studentId: '21A123456', 
     name: 'Trần Anh Tú', 
     email: 'anhtu@dainam.edu.vn', 
     role: 'student', 
@@ -29,15 +31,15 @@ class AppSession {
   );
 
   // -------------------------------------------------------------------
-  // 💰 QUẢN LÝ TÀI CHÍNH (BỘ NÃO MỚI)
+  // 💰 QUẢN LÝ TÀI CHÍNH (PHẦN NÀY ĐỂ HIỆN BIỂU ĐỒ FR4)
   // -------------------------------------------------------------------
   
-  static double totalFund = 15250000; // Con số tổng quỹ
+  static double totalFund = 15250000; 
 
   static List<Map<String, dynamic>> expenseHistory = [
     {
       'title': 'Học phí học kỳ I',
-      'subtitle': 'Lớp 12A1 • Chuyển khoản',
+      'subtitle': 'Lớp IT-K17 • Chuyển khoản',
       'amount': 2500000.0,
       'isIncome': false,
       'date': '20/03/2026',
@@ -51,7 +53,6 @@ class AppSession {
     },
   ];
 
-  // Hàm thêm giao dịch và tự nhảy số tiền
   static void addTransaction({
     required String title,
     required double amount,
@@ -70,7 +71,7 @@ class AppSession {
     else totalFund -= amount;
   }
 
-  // Hàm định dạng tiền tệ (15.250.000 đ)
+  // Tiện ích định dạng tiền tệ: 15.250.000 đ
   static String formatCurrency(double amount) {
     RegExp reg = RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))');
     String Function(Match) mathFunc = (Match match) => '${match[1]}.';
@@ -78,24 +79,25 @@ class AppSession {
   }
 
   // -------------------------------------------------------------------
-  // 👥 QUẢN LÝ SINH VIÊN (DÙNG CHO LỜI NHẮC)
+  // 👥 QUẢN LÝ DANH SÁCH LỚP (DÙNG CHO LỜI NHẮC/GIAO VIỆC)
   // -------------------------------------------------------------------
   
   static List<UserModel> allStudents = [
     mockStudent,
-    UserModel(id: '21A001', name: 'Nguyễn Văn An', email: 'an@dainam.edu.vn', role: 'student'),
-    UserModel(id: '21A002', name: 'Trần Thị Bích', email: 'bich@dainam.edu.vn', role: 'student'),
-    UserModel(id: '21A003', name: 'Lê Văn Cường', email: 'cuong@dainam.edu.vn', role: 'student'),
+    UserModel(id: 3, studentId: '21A001', name: 'Nguyễn Văn An', email: 'an@dainam.edu.vn', role: 'student'),
+    UserModel(id: 4, studentId: '21A002', name: 'Trần Thị Bích', email: 'bich@dainam.edu.vn', role: 'student'),
+    UserModel(id: 5, studentId: '21A003', name: 'Lê Văn Cường', email: 'cuong@dainam.edu.vn', role: 'student'),
   ];
 
   static void registerNewStudent(UserModel user) {
-    if (!allStudents.any((s) => s.id == user.id)) {
+    // Luôn kiểm tra MSSV trước khi thêm để tránh trùng lặp 
+    if (!allStudents.any((s) => s.studentId == user.studentId)) {
       allStudents.add(user);
     }
   }
 
   // -------------------------------------------------------------------
-  // 📩 THÔNG BÁO & TÀI SẢN
+  // 📩 THÔNG BÁO & TÀI SẢN (FR2)
   // -------------------------------------------------------------------
   
   static List<Map<String, String>> notifications = [
@@ -106,10 +108,20 @@ class AppSession {
     {'status': 'Đã trả', 'name': 'Nguyễn Văn An', 'item': 'MacBook Pro M2', 'date': 'Hôm nay', 'color': 'green'},
   ];
 
-  // 🧹 UTILS
-  static bool get isAdmin => currentUser?.role == 'admin';
+  // -------------------------------------------------------------------
+  // 🧹 UTILS (TIỆN ÍCH HỆ THỐNG)
+  // -------------------------------------------------------------------
+  
+  // Kiểm tra quyền Admin an toàn (không bị crash nếu chưa đăng nhập)
+  // Sử dụng lowercase để so sánh cho chắc chắn
+  static bool get isAdmin => currentUser?.role.toLowerCase() == 'admin';
 
+  // Lấy tên hiển thị an toàn cho Header
+  static String get currentUserName => currentUser?.name ?? "Khách";
+
+  // Xóa sạch phiên làm việc khi người dùng nhấn "Đăng xuất"
   static void clearSession() {
     currentUser = null;
+    // Có thể dọn dẹp thêm các cache khác ở đây nếu cần
   }
 }

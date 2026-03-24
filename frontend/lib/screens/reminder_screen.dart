@@ -82,7 +82,7 @@ class _ReminderScreenState extends State<ReminderScreen> {
                     if (isAllSelected) {
                       _selectedStudentIds.clear();
                     } else {
-                      _selectedStudentIds.addAll(studentList.map((s) => s.id));
+                      _selectedStudentIds.addAll(studentList.map((s) => s.studentId));
                     }
                   });
                 },
@@ -194,8 +194,8 @@ class _ReminderScreenState extends State<ReminderScreen> {
     return GestureDetector(
       onTap: () {
         setState(() {
-          if (isSelected) _selectedStudentIds.remove(student.id);
-          else _selectedStudentIds.add(student.id);
+          if (isSelected) _selectedStudentIds.remove(student.studentId);
+          else _selectedStudentIds.add(student.studentId);
         });
       },
       child: Container(
@@ -218,7 +218,7 @@ class _ReminderScreenState extends State<ReminderScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start, 
                 children: [
                   Text(student.name, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)), 
-                  Text(student.id, style: const TextStyle(color: Colors.grey, fontSize: 12))
+                  Text(student.studentId, style: const TextStyle(color: Colors.grey, fontSize: 12))
                 ]
               )
             ),
@@ -228,8 +228,8 @@ class _ReminderScreenState extends State<ReminderScreen> {
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
               onChanged: (val) {
                 setState(() {
-                  if (val == true) _selectedStudentIds.add(student.id);
-                  else _selectedStudentIds.remove(student.id);
+                  if (val == true) _selectedStudentIds.add(student.studentId);
+                  else _selectedStudentIds.remove(student.studentId);
                 });
               }
             ),

@@ -1,3 +1,4 @@
+D:\Mobile\BTL\backend\bin\Debug\net9.0\appsettings.Development.json
 D:\Mobile\BTL\backend\bin\Debug\net9.0\appsettings.json
 D:\Mobile\BTL\backend\bin\Debug\net9.0\backend.staticwebassets.endpoints.json
 D:\Mobile\BTL\backend\bin\Debug\net9.0\backend.exe
@@ -23,16 +24,7 @@ D:\Mobile\BTL\backend\bin\Debug\net9.0\Microsoft.EntityFrameworkCore.Abstraction
 D:\Mobile\BTL\backend\bin\Debug\net9.0\Microsoft.EntityFrameworkCore.Design.dll
 D:\Mobile\BTL\backend\bin\Debug\net9.0\Microsoft.EntityFrameworkCore.Relational.dll
 D:\Mobile\BTL\backend\bin\Debug\net9.0\Microsoft.EntityFrameworkCore.SqlServer.dll
-D:\Mobile\BTL\backend\bin\Debug\net9.0\Microsoft.Extensions.Caching.Abstractions.dll
-D:\Mobile\BTL\backend\bin\Debug\net9.0\Microsoft.Extensions.Caching.Memory.dll
-D:\Mobile\BTL\backend\bin\Debug\net9.0\Microsoft.Extensions.Configuration.Abstractions.dll
-D:\Mobile\BTL\backend\bin\Debug\net9.0\Microsoft.Extensions.DependencyInjection.dll
-D:\Mobile\BTL\backend\bin\Debug\net9.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
 D:\Mobile\BTL\backend\bin\Debug\net9.0\Microsoft.Extensions.DependencyModel.dll
-D:\Mobile\BTL\backend\bin\Debug\net9.0\Microsoft.Extensions.Logging.dll
-D:\Mobile\BTL\backend\bin\Debug\net9.0\Microsoft.Extensions.Logging.Abstractions.dll
-D:\Mobile\BTL\backend\bin\Debug\net9.0\Microsoft.Extensions.Options.dll
-D:\Mobile\BTL\backend\bin\Debug\net9.0\Microsoft.Extensions.Primitives.dll
 D:\Mobile\BTL\backend\bin\Debug\net9.0\Microsoft.Identity.Client.dll
 D:\Mobile\BTL\backend\bin\Debug\net9.0\Microsoft.Identity.Client.Extensions.Msal.dll
 D:\Mobile\BTL\backend\bin\Debug\net9.0\Microsoft.IdentityModel.Abstractions.dll
@@ -45,6 +37,9 @@ D:\Mobile\BTL\backend\bin\Debug\net9.0\Microsoft.OpenApi.dll
 D:\Mobile\BTL\backend\bin\Debug\net9.0\Microsoft.SqlServer.Server.dll
 D:\Mobile\BTL\backend\bin\Debug\net9.0\Microsoft.Win32.SystemEvents.dll
 D:\Mobile\BTL\backend\bin\Debug\net9.0\Mono.TextTemplating.dll
+D:\Mobile\BTL\backend\bin\Debug\net9.0\Swashbuckle.AspNetCore.Swagger.dll
+D:\Mobile\BTL\backend\bin\Debug\net9.0\Swashbuckle.AspNetCore.SwaggerGen.dll
+D:\Mobile\BTL\backend\bin\Debug\net9.0\Swashbuckle.AspNetCore.SwaggerUI.dll
 D:\Mobile\BTL\backend\bin\Debug\net9.0\System.ClientModel.dll
 D:\Mobile\BTL\backend\bin\Debug\net9.0\System.CodeDom.dll
 D:\Mobile\BTL\backend\bin\Debug\net9.0\System.Composition.AttributedModel.dll
@@ -54,13 +49,11 @@ D:\Mobile\BTL\backend\bin\Debug\net9.0\System.Composition.Runtime.dll
 D:\Mobile\BTL\backend\bin\Debug\net9.0\System.Composition.TypedParts.dll
 D:\Mobile\BTL\backend\bin\Debug\net9.0\System.Configuration.ConfigurationManager.dll
 D:\Mobile\BTL\backend\bin\Debug\net9.0\System.Drawing.Common.dll
-D:\Mobile\BTL\backend\bin\Debug\net9.0\System.Formats.Asn1.dll
 D:\Mobile\BTL\backend\bin\Debug\net9.0\System.IdentityModel.Tokens.Jwt.dll
 D:\Mobile\BTL\backend\bin\Debug\net9.0\System.Memory.Data.dll
 D:\Mobile\BTL\backend\bin\Debug\net9.0\System.Runtime.Caching.dll
 D:\Mobile\BTL\backend\bin\Debug\net9.0\System.Security.Cryptography.ProtectedData.dll
 D:\Mobile\BTL\backend\bin\Debug\net9.0\System.Security.Permissions.dll
-D:\Mobile\BTL\backend\bin\Debug\net9.0\System.Text.Json.dll
 D:\Mobile\BTL\backend\bin\Debug\net9.0\System.Windows.Extensions.dll
 D:\Mobile\BTL\backend\bin\Debug\net9.0\cs\Microsoft.CodeAnalysis.resources.dll
 D:\Mobile\BTL\backend\bin\Debug\net9.0\de\Microsoft.CodeAnalysis.resources.dll
@@ -146,6 +139,7 @@ D:\Mobile\BTL\backend\obj\Debug\net9.0\backend.AssemblyInfo.cs
 D:\Mobile\BTL\backend\obj\Debug\net9.0\backend.csproj.CoreCompileInputs.cache
 D:\Mobile\BTL\backend\obj\Debug\net9.0\backend.MvcApplicationPartsAssemblyInfo.cs
 D:\Mobile\BTL\backend\obj\Debug\net9.0\backend.MvcApplicationPartsAssemblyInfo.cache
+D:\Mobile\BTL\backend\obj\Debug\net9.0\backend.sourcelink.json
 D:\Mobile\BTL\backend\obj\Debug\net9.0\scopedcss\bundle\backend.styles.css
 D:\Mobile\BTL\backend\obj\Debug\net9.0\staticwebassets.build.json
 D:\Mobile\BTL\backend\obj\Debug\net9.0\staticwebassets.development.json
@@ -162,4 +156,3 @@ D:\Mobile\BTL\backend\obj\Debug\net9.0\refint\backend.dll
 D:\Mobile\BTL\backend\obj\Debug\net9.0\backend.pdb
 D:\Mobile\BTL\backend\obj\Debug\net9.0\backend.genruntimeconfig.cache
 D:\Mobile\BTL\backend\obj\Debug\net9.0\ref\backend.dll
-D:\Mobile\BTL\backend\bin\Debug\net9.0\Scalar.AspNetCore.dll

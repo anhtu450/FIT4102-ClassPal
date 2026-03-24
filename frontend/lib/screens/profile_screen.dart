@@ -71,10 +71,10 @@ class ProfileScreen extends StatelessWidget {
             _buildInfoTile(
               Icons.badge_outlined, 
               isAdmin ? 'Mã quản trị' : 'Mã sinh viên', 
-              user.id
+              user.studentId
             ),
-            _buildInfoTile(Icons.email_outlined, 'Email', user.email),
-            _buildInfoTile(Icons.phone_android_outlined, 'Điện thoại', user.phone),
+            _buildInfoTile(Icons.email_outlined, 'Email', user.email ?? 'Chưa cập nhật'),
+            _buildInfoTile(Icons.phone_android_outlined, 'Điện thoại', user.phone ?? 'Chưa cập nhật'),
             
             const SizedBox(height: 30),
             
